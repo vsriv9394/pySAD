@@ -24,7 +24,7 @@ this, you need to take care of a few things:
 - For all parameters add default argument values (`[]` for a scalar, `[m,n,...]`
 for an ndarray)
 - Add any function (like `exp` or `log`) with module name `ad` (i.e.
-`ad.exp` or `ad.log`). The currently supported non-core functions are:
+`ad.exp` or `ad.log`). The currently supported functions are:
 `abs`, `exp`, `log`, `sqrt`, `maximum` (only for scalars),
 `minimum` (only for scalars), `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`,
 `dot`, `cross` (only for 2D or 3D vectors) and `matmul`
