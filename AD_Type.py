@@ -326,8 +326,13 @@ class AD_Type:
 
     def resize(self, newshape):
         if self.isArray:
-            self.data.resize(shape)
-            self.shape = shape
+            newshape = list(newshape)
+            self.data.resize(newshape)
+            self.shape = newshape
+
+    def ravel(self):
+        if self.isArray:
+            return AD_Type(self.tape, data=self.data.ravel())
         else:
             return self
 

@@ -23,6 +23,7 @@ for an ndarray)
 `minimum` (only for scalars), `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`,
 `dot`, `cross` (only for 2D or 3D vectors) and `matmul`
 - All outputs must be returned contained in a single list
+- Some array manipulation functions (`resize`, `ravel` and indexing) also work
 - Though not absolutely necessary, it is highly recommended to use conditional
 statements only in `if` or `elif` commands. Also, when comparing a sad variable
 with a normal variable (i.e. an `int` or a `float`), the first argument of the
@@ -34,15 +35,15 @@ to do this though.
 Let us create a function now:
 ```
 def simpleFunction(x=[], y=[], z=[], **kwargs):
-  if x>1.0:
-    a = x*y + y*z/sad.exp(x*y)
-  else:
-    if z>0.0:
-      a = z/sad.exp(x*y)
+    if x>1.0:
+        a = x*y + y*z/sad.exp(x*y)
     else:
-      a = x*y*z
-  b = a - sad.exp(x*y/z)
-  return [b]
+        if z>0.0:
+            a = z/sad.exp(x*y)
+        else:
+            a = x*y*z
+    b = a - sad.exp(x*y/z)
+    return [b]
 ```
 
 Finally, to create the tape, create an `AD_Tape` object, compile the function,
@@ -124,4 +125,52 @@ simpleFunction(x=0.4, y=2.0, z=-3.0)
 and it should return
 ```
 [-3.1659283383646493]
+```
+
+## Example 2: A neural network
+
+Although, this framework was create with physical problems in mind, we can also
+create a neural network just as simply, as follows. This should be self-explanatory.
+Note how any function compiled using pySAD can call a child function just as
+naturally as in any other python framework.
+```
+import pySAD as sad
+import numpy as np
+
+\# Number of nodes in each layer in the NN
+nNodes = np.array([3, 7, 7, 1])
+
+\# prev: 1-D array containing previous node values
+\# weights: 2-D array containing weights
+\# biases: 1-D array containing biases
+def calcLayerNN(prev, weights, biases):
+
+    curr = sad.matmul(weights, prev) + biases
+    curr = curr / (1.0 + sad.exp(-curr))
+    return curr
+
+\# inputs: 1-D array of features
+\# theta: Parameter vector containing all weights and biases
+def calcNN(inputs=[nNodes[0]], theta=[sum(nNodes[1:]+sum(nNodes[:-1]*nNodes[1:]))], **kwargs):
+
+    beg = 0
+
+    nodes = inputs
+
+    for i in range(len(nNodes)-1):
+
+        biases = theta[beg:beg+nNodes[i+1]]
+        beg += nNodes[i+1]
+
+        weights = theta[beg:beg+nNodes[i+1]*nNodes[i]]
+        weights.resize((nNodes[i+1], nNodes[i]))
+        beg += nNodes[i+1]*nNodes[i]
+
+        nodes = calcLayerNN(nodes, weights, biases)
+
+    return nodes
+
+tape = sad.AD_Tape()
+tape.compile(calcNN, kwargs={})
+tape.write("nnTape", readable=True)
 ```
