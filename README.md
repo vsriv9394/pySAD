@@ -118,7 +118,7 @@ effort needed to optimize the code. It is here, that using parentheses around
 all binary operations remove any and all redundancies and make the code as
 efficient as it can be.
 
-In addition to these, the framework is numpy compatible, i.e. to run any unit
+In addition to this, the framework is numpy compatible, i.e. to run any unit
 tests while code development, you don't need to redefine this function using
 numpy to test if it is working correctly. Rather, just call it by passing
 `float` and `numpy.ndarray` as argument values and it just works! For example,
