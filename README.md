@@ -8,9 +8,13 @@ a tape for subroutines to be called iteratively.
 
 We believe that there is nothing better than examples to learn the use of any
 software package. So here are a few examples which demonstrate how to use the
-package
+package. We strongly recommend you to read these.
 
 ## Example 1: A simple function
 
-.. code:: python
-  import pySAD as ad
+To import the pySAD framework, add the pySAD directory to your `PYTHONPATH`
+environment variable and add the following import command in the beginning
+of the python file you intend to create your tape from.
+```
+import pySAD as sad
+```
