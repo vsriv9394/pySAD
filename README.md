@@ -18,3 +18,19 @@ of the python file you intend to create your tape from.
 ```
 import pySAD as sad
 ```
+Next, you need to add the subroutine you wish to create a tape for. While doing
+this, you need to take care of a few things:
+- Add an explicit `**kwargs` parameter in the end
+- For all parameters add default argument values (`[]` for a scalar, `[m,n,...]`
+for an ndarray)
+- Add any function (like `exp` or `log`) with module name `ad` (i.e.
+`ad.exp` or `ad.log`). The currently supported non-core functions are:
+`abs`, `exp`, `log`, `sqrt`, `maximum` (only for scalars),
+`minimum` (only for scalars), `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`,
+`dot`, `cross` (only for 2D or 3D vectors) and `matmul`
+
+Let us create a function now:
+```
+def simpleFunction(x=[], y=[], z=[], **kwargs):
+  a = x*y+z/ad.exp(x*y)
+```
