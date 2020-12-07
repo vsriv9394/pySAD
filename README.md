@@ -24,7 +24,7 @@ this, you need to take care of a few things:
 - For all parameters add default argument values (`[]` for a scalar, `[m,n,...]`
 for an ndarray)
 - Add any function (like `exp` or `log`) with module name `ad` (i.e.
-`ad.exp` or `ad.log`). The currently supported functions are:
+`sad.exp` or `sad.log`). The currently supported functions are:
 `abs`, `exp`, `log`, `sqrt`, `maximum` (only for scalars),
 `minimum` (only for scalars), `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`,
 `dot`, `cross` (only for 2D or 3D vectors) and `matmul`
@@ -41,13 +41,14 @@ Let us create a function now:
 ```
 def simpleFunction(x=[], y=[], z=[], **kwargs):
   if x>1.0:
-    a = x*y + y*z/ad.exp(x*y)
+    a = x*y + y*z/sad.exp(x*y)
   else:
     if z>0.0:
-      a = z/ad.exp(x*y)
+      a = z/sad.exp(x*y)
     else:
       a = x*y*z
-  b = a - ad.sqrt(x*y/z)
+  b = a - sad.sqrt(x*y/z)
+  return [b]
 ```
 
 Finally, to create the tape, create an `AD_Tape` object, compile the function,
