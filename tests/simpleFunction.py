@@ -13,7 +13,7 @@ def simpleFunction(x=[], y=[], z=[], **kwargs):
     
 tape = sad.AD_Tape()
 tape.compile(simpleFunction, kwargs={})
-tape.write("tape", readable=True)
+tape.write("tape.txt", readable=True)
 
 #print(tape.evaluate(inputs=[0.4, 2.0, 3.0]))
 #print(func(x=0.4, y=2.0, z=3.0))

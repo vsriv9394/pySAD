@@ -56,12 +56,45 @@ and write the tape as follows:
 ```
 tape = sad.AD_Tape()
 tape.compile(simpleFunction, kwargs={})
-tape.write('tape.txt', readable=True)
+tape.write("tape.txt", readable=True)
 ```
 
 The `readable` flag in the `tape.write` subroutine is used to represent the
 operators/functions as strings instead of numerical ids in the tape file.
 
-This creates the following tape file:
+This creates the following `tape.txt` file:
 ```
+1   3 1 32
+2          -1        -1        -1 CONST 0.000000000000000e+00
+3          -1        -1        -1 CONST 0.000000000000000e+00
+4          -1        -1        -1 CONST 0.000000000000000e+00
+5          -1        -1        -1 CONST 1.000000000000000e+00
+6          14         0         3  IFGT 0.000000000000000e+00
+7          -1         0         1   MUL 0.000000000000000e+00
+8          -1         1         2   MUL 0.000000000000000e+00
+9          -1         5        -1   EXP 0.000000000000000e+00
+10         -1         6         7   DIV 0.000000000000000e+00
+11         -1         5         8   ADD 0.000000000000000e+00
+12         -1         5         2   DIV 0.000000000000000e+00
+13         -1        10        -1  SQRT 0.000000000000000e+00
+14         -1         9        11   SUB 0.000000000000000e+00
+15         -1        12         3   MUL 0.000000000000000e+00
+16         32         0         3  IFLE 0.000000000000000e+00
+17         -1        -1        -1 CONST 0.000000000000000e+00
+18         24         2        15  IFGT 0.000000000000000e+00
+19         -1         0         1   MUL 0.000000000000000e+00
+20         -1        17        -1   EXP 0.000000000000000e+00
+21         -1         2        18   DIV 0.000000000000000e+00
+22         -1        17         2   DIV 0.000000000000000e+00
+23         -1        20        -1  SQRT 0.000000000000000e+00
+24         -1        19        21   SUB 0.000000000000000e+00
+25         -1        22         3   MUL 0.000000000000000e+00
+26         -1        -1        -1 CONST 0.000000000000000e+00
+27         32         2        24  IFLE 0.000000000000000e+00
+28         -1         0         1   MUL 0.000000000000000e+00
+29         -1        26         2   MUL 0.000000000000000e+00
+30         -1        26         2   DIV 0.000000000000000e+00
+31         -1        28        -1  SQRT 0.000000000000000e+00
+32         -1        27        29   SUB 0.000000000000000e+00
+33         -1        30         3   MUL 0.000000000000000e+00
 ```
