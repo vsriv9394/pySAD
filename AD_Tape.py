@@ -4,31 +4,32 @@ from pySAD.AD_Type import AD_Type
 
 operationsList = \
 {
-    "CONST": 0,
-    "NEG":   1,
-    "ADD":   2,
-    "SUB":   3,
-    "MUL":   4,
-    "DIV":   5,
-    "POW":   6,
-    "ABS":   7,
-    "EXP":   8,
-    "LOG":   9,
-    "SQRT": 10,
-    "MAX":  11,
-    "MIN":  12,
-    "SIN":  13,
-    "COS":  14,
-    "TAN":  15,
-    "SINH": 16,
-    "COSH": 17,
-    "TANH": 18,
-    "IFEQ": 19,
-    "IFNE": 20,
-    "IFLT": 21,
-    "IFGE": 22,
-    "IFGT": 23, 
-    "IFLE": 24
+    "CONST":  0,
+    "NEG":    1,
+    "ADD":    2,
+    "SUB":    3,
+    "MUL":    4,
+    "DIV":    5,
+    "POW":    6,
+    "ABS":    7,
+    "EXP":    8,
+    "LOG":    9,
+    "SQRT":  10,
+    "MAX":   11,
+    "MIN":   12,
+    "SIN":   13,
+    "COS":   14,
+    "TAN":   15,
+    "SINH":  16,
+    "COSH":  17,
+    "TANH":  18,
+    "IFEQ":  19,
+    "IFNE":  20,
+    "IFLT":  21,
+    "IFGE":  22,
+    "IFGT":  23, 
+    "IFLE":  24,
+    "IFEND": 25
 }
 
 class AD_Instruction:
@@ -106,14 +107,20 @@ class AD_Tape:
             
             self.conditionalValues[-1] = False
             self.instructions[self.idsOfConditionals[-1]].blockEnd = len(self.instructions)
+            self.addInstruction(-1, -1, "IFEND", 0.0)
+            self.instructions[-1].blockEnd = self.idsOfConditionals[-1]
             self.idsOfConditionals = self.idsOfConditionals[:-1]
             
             self.conditionalCounter = 0
             outputs = function(**argDict)
             outputs = [output*1.0 for output in outputs]
+
+            tapeLength = len(self.instructions)
             
             while self.conditionalValues[-1]==False:
-                self.instructions[self.idsOfConditionals[-1]].blockEnd = len(self.instructions)
+                self.instructions[self.idsOfConditionals[-1]].blockEnd = tapeLength
+                self.addInstruction(-1, -1, "IFEND", 0.0)
+                self.instructions[-1].blockEnd = self.idsOfConditionals[-1]
                 self.conditionalValues = self.conditionalValues[:-1]
                 self.idsOfConditionals = self.idsOfConditionals[:-1]
                 self.idsOfNonZeroConstants = self.idsOfNonZeroConstants[:-1]

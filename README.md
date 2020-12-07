@@ -47,7 +47,7 @@ def simpleFunction(x=[], y=[], z=[], **kwargs):
       a = z/sad.exp(x*y)
     else:
       a = x*y*z
-  b = a - sad.sqrt(x*y/z)
+  b = a - sad.exp(x*y/z)
   return [b]
 ```
 
@@ -62,39 +62,72 @@ tape.write("tape.txt", readable=True)
 The `readable` flag in the `tape.write` subroutine is used to represent the
 operators/functions as strings instead of numerical ids in the tape file.
 
-This creates the following `tape.txt` file:
+This creates the following `tape.txt` file (with line numbers):
 ```
-1   3 1 32
-2          -1        -1        -1 CONST 0.000000000000000e+00
-3          -1        -1        -1 CONST 0.000000000000000e+00
-4          -1        -1        -1 CONST 0.000000000000000e+00
-5          -1        -1        -1 CONST 1.000000000000000e+00
-6          14         0         3  IFGT 0.000000000000000e+00
-7          -1         0         1   MUL 0.000000000000000e+00
-8          -1         1         2   MUL 0.000000000000000e+00
-9          -1         5        -1   EXP 0.000000000000000e+00
-10         -1         6         7   DIV 0.000000000000000e+00
-11         -1         5         8   ADD 0.000000000000000e+00
-12         -1         5         2   DIV 0.000000000000000e+00
-13         -1        10        -1  SQRT 0.000000000000000e+00
-14         -1         9        11   SUB 0.000000000000000e+00
-15         -1        12         3   MUL 0.000000000000000e+00
-16         32         0         3  IFLE 0.000000000000000e+00
-17         -1        -1        -1 CONST 0.000000000000000e+00
-18         24         2        15  IFGT 0.000000000000000e+00
-19         -1         0         1   MUL 0.000000000000000e+00
-20         -1        17        -1   EXP 0.000000000000000e+00
-21         -1         2        18   DIV 0.000000000000000e+00
-22         -1        17         2   DIV 0.000000000000000e+00
-23         -1        20        -1  SQRT 0.000000000000000e+00
-24         -1        19        21   SUB 0.000000000000000e+00
-25         -1        22         3   MUL 0.000000000000000e+00
-26         -1        -1        -1 CONST 0.000000000000000e+00
-27         32         2        24  IFLE 0.000000000000000e+00
-28         -1         0         1   MUL 0.000000000000000e+00
-29         -1        26         2   MUL 0.000000000000000e+00
-30         -1        26         2   DIV 0.000000000000000e+00
-31         -1        28        -1  SQRT 0.000000000000000e+00
-32         -1        27        29   SUB 0.000000000000000e+00
-33         -1        30         3   MUL 0.000000000000000e+00
+  1 3 1 36
+  2        -1        -1        -1 CONST 0.000000000000000e+00
+  3        -1        -1        -1 CONST 0.000000000000000e+00
+  4        -1        -1        -1 CONST 0.000000000000000e+00
+  5        -1        -1        -1 CONST 1.000000000000000e+00
+  6        14         0         3  IFGT 0.000000000000000e+00
+  7        -1         0         1   MUL 0.000000000000000e+00
+  8        -1         1         2   MUL 0.000000000000000e+00
+  9        -1         5        -1   EXP 0.000000000000000e+00
+ 10        -1         6         7   DIV 0.000000000000000e+00
+ 11        -1         5         8   ADD 0.000000000000000e+00
+ 12        -1         5         2   DIV 0.000000000000000e+00
+ 13        -1        10        -1   EXP 0.000000000000000e+00
+ 14        -1         9        11   SUB 0.000000000000000e+00
+ 15        -1        12         3   MUL 0.000000000000000e+00
+ 16         4        -1        -1 IFEND 0.000000000000000e+00
+ 17        34         0         3  IFLE 0.000000000000000e+00
+ 18        -1        -1        -1 CONST 0.000000000000000e+00
+ 19        25         2        16  IFGT 0.000000000000000e+00
+ 20        -1         0         1   MUL 0.000000000000000e+00
+ 21        -1        18        -1   EXP 0.000000000000000e+00
+ 22        -1         2        19   DIV 0.000000000000000e+00
+ 23        -1        18         2   DIV 0.000000000000000e+00
+ 24        -1        21        -1   EXP 0.000000000000000e+00
+ 25        -1        20        22   SUB 0.000000000000000e+00
+ 26        -1        23         3   MUL 0.000000000000000e+00
+ 27        17        -1        -1 IFEND 0.000000000000000e+00
+ 28        -1        -1        -1 CONST 0.000000000000000e+00
+ 29        34         2        26  IFLE 0.000000000000000e+00
+ 30        -1         0         1   MUL 0.000000000000000e+00
+ 31        -1        28         2   MUL 0.000000000000000e+00
+ 32        -1        28         2   DIV 0.000000000000000e+00
+ 33        -1        30        -1   EXP 0.000000000000000e+00
+ 34        -1        29        31   SUB 0.000000000000000e+00
+ 35        -1        32         3   MUL 0.000000000000000e+00
+ 36        27        -1        -1 IFEND 0.000000000000000e+00
+ 37        15        -1        -1 IFEND 0.000000000000000e+00
+```
+
+Notice that the outputs (in this case, the single output) is located right
+above the `IFEND` operations. Also, note that to force these outputs at the
+end of the `if` blocks,  they have been multiplied with instruction 3 (line 5)
+which is a constant 1.0. Also, note how quantities are reused:
+- Any non-zero constants are declared only once inside a conditional block no
+matter how many times they are used inside the code (for example, the constant
+1 mentioned above is recycled for all its uses in the function)
+- Any function evaluations that have been previously performed are not repeated
+in the tape, e.g. `x*y` evaluated in line 7 has been re-used in line 9, even
+though we have `exp(x*y)` mentioned in the code and the natural behaviour would
+have been to recalculate. This is really useful, because it takes away the added
+effort needed to optimize the code. It is here, that using parentheses around
+all binary operations remove any and all redundancies and make the code as
+efficient as it can be.
+
+In addition to these, the framework is numpy compatible, i.e. to run any unit
+tests while code development, you don't need to redefine this function using
+numpy to test if it is working correctly. Rather, just call it by passing
+`float` and `numpy.ndarray` as argument values and it just works! For example,
+to evaluate the above function for argument values `x=0.4, y=2.0, z=-3.0` just
+call:
+```
+simpleFunction(x=0.4, y=2.0, z=-3.0)
+```
+and it should return
+```
+[-3.1659283383646493]
 ```
