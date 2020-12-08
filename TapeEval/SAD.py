@@ -53,7 +53,7 @@ class SAD_Tape(C.Structure):
         ("instructions", C.POINTER(SAD_Instruction))
     ]
 
-    def __init__(self, filename=None):
+    def __init__(self, filename=None, subroutineName="evaluateTape"):
         
         self.alloc = False
 
@@ -67,7 +67,7 @@ class SAD_Tape(C.Structure):
         self.readTapeFromFile.restype = None
         self.readTapeFromFile.argtypes = [C.POINTER(SAD_Tape), C.c_char_p]
         
-        self.evaluateTape = libSAD.__getattr__("evaluateTape")
+        self.evaluateTape = libSAD.__getattr__(subroutineName)
         self.evaluateTape.restype = None
         self.evaluateTape.argtypes = [SAD_Tape]
 

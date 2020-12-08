@@ -189,6 +189,12 @@ tape.write("nnTape.txt", readable=True)
 Now, the tape so obtained can be used to evaluate outputs and jacobians. This
 can be done in any language, but C/C++ is chosen for its speed and convenience.
 Also, pure C subroutines can be easily ported to almost any other language, which
-makes things even better. Here is an example to show how this is done.
+makes things even better. A python wrapper for the same has also been provided.
+
+Here is an example to show how this is done.
 
 ## Example: "The" simple function
+
+Copy or link the header file `pySAD/TapeEval/SAD.h` in the working directory.
+Then, a C-subroutine can be written as follows. This subroutine MUST be called
+`evaluateTape`
