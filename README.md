@@ -270,3 +270,4 @@ Please note a few things here:
 - Numpy arrays are flattened when passed to C, so the indexing in python `[i,j,...,k,l]`
 for array dimension `[m,n,r,...,s]` is translated in C to `[(...((i*n + j)*r + ... k)*s + l]`
 - Scalar outputs are not passed in python but returned
+- The first C variable, of type `SAD_Tape`, is also not passed as it is contained inside the object of class `AD_EvalTape`
