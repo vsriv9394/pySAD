@@ -184,7 +184,7 @@ tape.compile(calcNN, kwargs={})
 tape.write("nnTape.txt", readable=True)
 ```
 
-# Tape Evaluation
+# Tape Evaluation (C/C++ or Python)
 
 Now, the tape so obtained can be used to evaluate outputs and jacobians. This
 can be done in any language, but C/C++ is chosen for its speed and convenience.
