@@ -1,4 +1,5 @@
 import pySAD as sad
+import numpy as np
 from simpleFunction import simpleFunction
 
 # Tape creation
@@ -14,9 +15,11 @@ print(b[0])
 
 # Tape evaluation using C
 
+jac_b = np.zeros((1,3))
 tape = sad.AD_EvalTape(filename="tape.txt")
-out = tape.evaluate(0.4, 2.0, -3.0, nScalarOutputs=3)
-print(out)
+b = tape.evaluate(0.4, 2.0, -3.0, jac_b, nScalarOutputs=1)
+print(b)
+print(jac_b)
 
 # Derivative verification
 
@@ -24,4 +27,7 @@ b1 = simpleFunction(x=0.4+1e-6, y=2.0, z=-3.0)
 print((b1[0]-b[0])/1e-6)
 
 b1 = simpleFunction(x=0.4, y=2.0+1e-6, z=-3.0)
+print((b1[0]-b[0])/1e-6)
+
+b1 = simpleFunction(x=0.4, y=2.0, z=-3.0+1e-6)
 print((b1[0]-b[0])/1e-6)
