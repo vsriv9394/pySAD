@@ -268,5 +268,5 @@ Please note a few things here:
 - `int` and `float` (`double` in C) variables can be passed as is
 - `int` or `double` arrays in C are `int` or `double` numpy arrays in python
 - Numpy arrays are flattened when passed to C, so the indexing in python `[i,j,...,k,l]`
-for array dimension `[m,n,...,r,s]` is translated in C to `[(...((i\*m + j)\*n + ... k)\*r + l]`
+for array dimension `[m,n,...,r,s]` is translated in C to `[(...((i*m + j)*n + ... k)*r + l]`
 - Scalar outputs are not passed in python but returned
