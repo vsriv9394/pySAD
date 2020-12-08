@@ -266,7 +266,7 @@ Please note a few things here:
 - The output is a list of `float` variables with dimension `nScalarOutputs` if
 `nScalarOutputs` is non-zero and `None` otherwise
 - `int` and `float` (`double` in C) variables can be passed as is
-- `int` or `double` arrays in C are `int` or `double` numpy arrays in python
+- `int` or `double` arrays in C are `int` or `float` numpy arrays in python
 - Numpy arrays are flattened when passed to C, so the indexing in python `[i,j,...,k,l]`
 for array dimension `[m,n,r,...,s]` is translated in C to `[(...((i*n + j)*r + ... k)*s + l]`
 - Scalar outputs are not passed in python but returned
