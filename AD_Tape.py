@@ -23,13 +23,13 @@ operationsList = \
     "SINH":  16,
     "COSH":  17,
     "TANH":  18,
-    "IFEQ":  19,
-    "IFNE":  20,
-    "IFLT":  21,
-    "IFGE":  22,
-    "IFGT":  23, 
-    "IFLE":  24,
-    "IFEND": 25
+    "IFEND": 19,
+    "IFEQ":  20,
+    "IFNE":  21,
+    "IFLT":  22,
+    "IFGE":  23,
+    "IFGT":  24, 
+    "IFLE":  25
 }
 
 class AD_Instruction:

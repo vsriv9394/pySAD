@@ -177,9 +177,18 @@ def calcNN(inputs=[nNodes[0]], theta=[sum(nNodes[1:]+sum(nNodes[:-1]*nNodes[1:])
 
         nodes = calcLayerNN(nodes, weights, biases)
 
-    return nodes
+    return [nodes]
 
 tape = sad.AD_Tape()
 tape.compile(calcNN, kwargs={})
 tape.write("nnTape.txt", readable=True)
 ```
+
+# Tape Evaluation
+
+Now, the tape so obtained can be used to evaluate outputs and jacobians. This
+can be done in any language, but C/C++ is chosen for its speed and convenience.
+Also, pure C subroutines can be easily ported to almost any other language, which
+makes things even better. Here is an example to show how this is done.
+
+## Example: "The" simple function
