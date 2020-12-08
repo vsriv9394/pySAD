@@ -263,6 +263,7 @@ b = tape.evaluate(0.4, 2.0, -3.0, jac_b, nScalarOutputs=1)
 ```
 
 Please note a few things here:
+- The function signature of AD_EvalTape.evaluate is the same as the C library subroutine with the following tweaks
 - The output is a list of `float` variables with dimension `nScalarOutputs` if
 `nScalarOutputs` is non-zero and `None` otherwise
 - `int` and `float` (`double` in C) variables can be passed as is
