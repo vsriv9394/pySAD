@@ -16,7 +16,7 @@ print(b[0])
 # Tape evaluation using C
 
 jac_b = np.zeros((1,3))
-tape = sad.AD_EvalTape(filename="tape.txt")
+tape = sad.AD_EvalTape(filename="tape.txt",  libName="./libSAD.so", subroutineName="evaluateTape")
 b = tape.evaluate(0.4, 2.0, -3.0, jac_b, nScalarOutputs=1)
 print(b)
 print(jac_b)

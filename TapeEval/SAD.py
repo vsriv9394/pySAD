@@ -53,11 +53,11 @@ class SAD_Tape(C.Structure):
         ("instructions", C.POINTER(SAD_Instruction))
     ]
 
-    def __init__(self, filename=None, subroutineName="evaluateTape"):
+    def __init__(self, filename=None, libName="./libSAD.so", subroutineName="evaluateTape"):
         
         self.alloc = False
 
-        libSAD = C.CDLL("./libSAD.so")
+        libSAD = C.CDLL(libName)
 
         self.deleteTape = libSAD.__getattr__("deleteTape")
         self.deleteTape.restype = None

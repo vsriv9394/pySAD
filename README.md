@@ -196,9 +196,13 @@ Here is an example to show how this is done.
 ## Example: "The" simple function
 
 Copy or link the header file `pySAD/TapeEval/SAD.h` in the working directory.
-Then, a file containing C-subroutines can be written as follows.
+Then, a file containing C-subroutines can be written as follows, with any scalar
+outputs at the end of argument list (declared as `double*`).
 
 ```
+-----------------------------------------------------------------------------------------------
+FILE: "evaluateTape.c"
+-----------------------------------------------------------------------------------------------
 #include "SAD.h"
 #include <stdio.h>
 
@@ -206,7 +210,7 @@ Then, a file containing C-subroutines can be written as follows.
 extern "C"
 {
 #endif
-  void evaluateTape(SAD_Tape tape, double x, double y, double z, double *b, double *dbdx, double *dbdy, double *dbdz)
+  void evaluateTape(SAD_Tape tape, double x, double y, double z, double *jac_b, double *b)
   {
     setTapeInput(tape, 0, x);
     setTapeInput(tape, 1, y);
@@ -215,11 +219,54 @@ extern "C"
     evaluateTapeOutputsAndJacobian(&tape);
 
     b[0]    = getTapeOutput(tape, 0);
-    dbdx[0] = getTapeJacobian(tape, 0, 0);
-    dbdy[0] = getTapeJacobian(tape, 0, 1);
-    dbdz[0] = getTapeJacobian(tape, 0, 2);
+    jac_b[0] = getTapeJacobian(tape, 0, 0);
+    jac_b[1] = getTapeJacobian(tape, 0, 1);
+    jac_b[2] = getTapeJacobian(tape, 0, 2);
   }
 #ifdef __clpusplus
 }
 #endif
 ```
+
+When using this function inside a C/C++ program, the variable `tape` needs to
+be initialized and destroyed at the beginning and end of the program. For this
+one can use the following.
+```
+readTapeFromFile(<tape-variable>, <filename>)
+deleteTape(<tape-variable>)
+```
+For example,
+```
+readTapeFromFile(tape, "tape.txt")
+deleteTape(tape)
+```
+
+When using inside the python environment, one needs to first create a shared
+library from the file containing the above function (without any initialization
+or destruction of the tape). This can be done using the following command.
+```
+gcc -fPIC -O3 --shared <source_filename> -o <output_library_filename>
+```
+For example:
+```
+gcc -fPIC -O3 --shared evaluateTape.c -o libSAD.so
+```
+
+Once this shared library is created, initialize an AD_EvalTape class in python
+as follows, and evaluate the tape and jacobians as follows.
+```
+import numpy as np
+
+jac_b = np.zeros((1,3))
+tape = sad.AD_EvalTape(filename="tape.txt",  libName="./libSAD.so", subroutineName="evaluateTape")
+b = tape.evaluate(0.4, 2.0, -3.0, jac_b, nScalarOutputs=1)
+```
+
+Please note a few things here:
+- The output is a list of `float` variables with dimension `nScalarOutputs` if
+`nScalarOutputs` is non-zero and `None` otherwise
+- `int` and `float` (`double` in C) variables can be passed as is
+- `int` or `double` arrays in C are `int` or `double` numpy arrays in python
+- Numpy arrays are flattened when passed to C, so the indexing in python `[i,j,...,k,l]`
+for array dimension `[m,n,...,r,s]` is translated in C to `[(...((i\*m + j)\*n + ... k)\*r + l]`
+- Scalar outputs are not passed in python but returned
